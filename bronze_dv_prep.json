@@ -1,0 +1,105 @@
+{
+    "name": "bronze_dv_prep",
+    "properties": {
+        "activities": [
+            {
+                "name": "landing_2_bronze",
+                "type": "SynapseNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebook": {
+                        "referenceName": "landing_2_bronze",
+                        "type": "NotebookReference"
+                    },
+                    "parameters": {
+                        "STORAGE_ACCOUNT_NAME": {
+                            "value": {
+                                "value": "@pipeline().parameters.STORAGE_ACCOUNT_NAME",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "LANDING_STORAGE_ACCOUNT_CONTAINER": {
+                            "value": {
+                                "value": "@pipeline().parameters.LANDING_STORAGE_ACCOUNT_CONTAINER",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "BRONZE_STORAGE_ACCOUNT_CONTAINER": {
+                            "value": {
+                                "value": "@pipeline().parameters.BRONZE_STORAGE_ACCOUNT_CONTAINER",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "LANDING_BASE_PATH": {
+                            "value": {
+                                "value": "@pipeline().parameters.LANDING_BASE_PATH",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "BRONZE_BASE_PATH": {
+                            "value": {
+                                "value": "@pipeline().parameters.BRONZE_BASE_PATH",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    },
+                    "snapshot": true,
+                    "sparkPool": {
+                        "referenceName": "ApcheSparkPool",
+                        "type": "BigDataPoolReference"
+                    },
+                    "executorSize": "Small",
+                    "conf": {
+                        "spark.dynamicAllocation.enabled": false
+                    },
+                    "driverSize": "Small"
+                }
+            }
+        ],
+        "parameters": {
+            "STORAGE_ACCOUNT_NAME": {
+                "type": "string",
+                "defaultValue": "adls2synapseintf"
+            },
+            "LANDING_STORAGE_ACCOUNT_CONTAINER": {
+                "type": "string",
+                "defaultValue": "tutorialcontainer"
+            },
+            "BRONZE_STORAGE_ACCOUNT_CONTAINER": {
+                "type": "string",
+                "defaultValue": "tutorialcontainer"
+            },
+            "LANDING_BASE_PATH": {
+                "type": "string",
+                "defaultValue": "test/landing"
+            },
+            "BRONZE_BASE_PATH": {
+                "type": "string",
+                "defaultValue": "test/bronze"
+            },
+            "DATA_SOURCE": {
+                "type": "string",
+                "defaultValue": "CSV"
+            }
+        },
+        "folder": {
+            "name": "SYNAPSE_TUTORIAL"
+        },
+        "annotations": [],
+        "lastPublishTime": "2025-10-16T14:31:01Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}

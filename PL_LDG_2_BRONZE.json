@@ -1,0 +1,161 @@
+{
+    "name": "PL_LDG_2_BRONZE",
+    "properties": {
+        "activities": [
+            {
+                "name": "ForEach_Bronze_Notebooks",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "NOTEBOOK_NAME_BRONZE",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@variables('BRONZE_LIST')",
+                        "type": "Expression"
+                    },
+                    "batchCount": 12,
+                    "activities": [
+                        {
+                            "name": "notebook_bronze",
+                            "type": "SynapseNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebook": {
+                                    "referenceName": {
+                                        "value": "@item()",
+                                        "type": "Expression"
+                                    },
+                                    "type": "NotebookReference"
+                                },
+                                "parameters": {
+                                    "STORAGE_ACCOUNT_NAME": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.STORAGE_ACCOUNT_NAME",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    },
+                                    "LANDING_STORAGE_ACCOUNT_CONTAINER": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.LANDING_STORAGE_ACCOUNT_CONTAINER",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    },
+                                    "BRONZE_STORAGE_ACCOUNT_CONTAINER": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.BRONZE_STORAGE_ACCOUNT_CONTAINER",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    },
+                                    "LANDING_BASE_PATH": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.LANDING_BASE_PATH",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    },
+                                    "BRONZE_BASE_PATH": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.BRONZE_BASE_PATH",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    }
+                                },
+                                "snapshot": true,
+                                "sparkPool": {
+                                    "referenceName": "ApcheSparkPool",
+                                    "type": "BigDataPoolReference"
+                                },
+                                "executorSize": "Small",
+                                "conf": {
+                                    "spark.dynamicAllocation.enabled": true,
+                                    "spark.dynamicAllocation.minExecutors": 1,
+                                    "spark.dynamicAllocation.maxExecutors": null
+                                },
+                                "driverSize": "Small",
+                                "numExecutors": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "NOTEBOOK_NAME_BRONZE",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "BRONZE_LIST",
+                    "value": [
+                        "NB_LDG_2_BRONZE_AIRCRAFT_TYPES",
+                        "NB_LDG_2_BRONZE_AIRLINES",
+                        "NB_LDG_2_BRONZE_AIRPLANES",
+                        "NB_LDG_2_BRONZE_AIRPORTS",
+                        "NB_LDG_2_BRONZE_CITIES",
+                        "NB_LDG_2_BRONZE_COUNTRIES",
+                        "NB_LDG_2_BRONZE_ROUTES",
+                        "NB_LDG_2_BRONZE_TAXES"
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "STORAGE_ACCOUNT_NAME": {
+                "type": "string",
+                "defaultValue": "adls2synapseintf"
+            },
+            "LANDING_STORAGE_ACCOUNT_CONTAINER": {
+                "type": "string",
+                "defaultValue": "tutorialcontainer"
+            },
+            "BRONZE_STORAGE_ACCOUNT_CONTAINER": {
+                "type": "string",
+                "defaultValue": "tutorialcontainer"
+            },
+            "LANDING_BASE_PATH": {
+                "type": "string",
+                "defaultValue": "test/landing"
+            },
+            "BRONZE_BASE_PATH": {
+                "type": "string",
+                "defaultValue": "test/bronze"
+            },
+            "DATA_SOURCE": {
+                "type": "string",
+                "defaultValue": "CSV"
+            }
+        },
+        "variables": {
+            "BRONZE_LIST": {
+                "type": "Array"
+            }
+        },
+        "folder": {
+            "name": "SYNAPSE_TUTORIAL"
+        },
+        "annotations": [],
+        "lastPublishTime": "2025-10-16T14:30:25Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
